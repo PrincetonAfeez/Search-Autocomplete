@@ -34,3 +34,5 @@ search-autocomplete-browser-check.png
 
 # Local build artefacts
 search_autocomplete.egg-info/
+
+.hypothesis/
