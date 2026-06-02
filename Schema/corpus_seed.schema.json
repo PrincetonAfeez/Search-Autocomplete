@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Search-Autocomplete/Schema/corpus_seed.schema.json",
+  "title": "Corpus Seed Row",
+  "description": "Accepted logical row shape for the seed_corpus command. Physical files are UTF-8 text/CSV with one or two columns.",
+  "oneOf": [
+    {
+      "title": "Word only row",
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      ],
+      "minItems": 1,
+      "maxItems": 1
+    },
+    {
+      "title": "Word and weight row",
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    }
+  ],
+  "examples": [
+    [
+      "python",
+      100
+    ],
+    [
+      "django"
+    ],
+    [
+      "trie",
+      80
+    ]
+  ]
+}

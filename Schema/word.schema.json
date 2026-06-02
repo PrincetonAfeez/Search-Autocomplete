@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Search-Autocomplete/Schema/word.schema.json",
+  "title": "Word",
+  "description": "Persisted corpus word record used as the source of truth for autocomplete suggestions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "text",
+    "normalized_text",
+    "weight",
+    "is_active"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Database primary key."
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Display value before normalization."
+    },
+    "normalized_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Unique normalized lookup key derived from text."
+    },
+    "weight": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647,
+      "default": 1,
+      "description": "Static ranking score. Higher ranks first."
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this word is loaded into the runtime trie."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "examples": [
+    {
+      "id": 1,
+      "text": "Python",
+      "normalized_text": "python",
+      "weight": 100,
+      "is_active": true,
+      "created_at": "2026-01-01T12:00:00Z",
+      "updated_at": "2026-01-01T12:00:00Z"
+    }
+  ]
+}

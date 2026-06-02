@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Search-Autocomplete/Schema/suggestion.schema.json",
+  "title": "Suggestion",
+  "description": "Runtime suggestion object produced by the autocomplete trie and adapted for the HTMX suggestions partial.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "word",
+    "normalized_word",
+    "weight",
+    "matched_length",
+    "matched_display_length"
+  ],
+  "properties": {
+    "word": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Display word returned to the UI."
+    },
+    "normalized_word": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Normalized form used for sorting and matching."
+    },
+    "weight": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647,
+      "description": "Static ranking score."
+    },
+    "matched_length": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 255,
+      "description": "Length of the normalized matched prefix."
+    },
+    "matched_display_length": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 255,
+      "description": "Display-string length used to split highlighted prefix and suffix."
+    },
+    "prefix": {
+      "type": "string",
+      "description": "Template-only display prefix segment."
+    },
+    "suffix": {
+      "type": "string",
+      "description": "Template-only display suffix segment."
+    }
+  },
+  "examples": [
+    {
+      "word": "Python",
+      "normalized_word": "python",
+      "weight": 100,
+      "matched_length": 2,
+      "matched_display_length": 2,
+      "prefix": "Py",
+      "suffix": "thon"
+    }
+  ]
+}

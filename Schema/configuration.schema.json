@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Search-Autocomplete/Schema/configuration.schema.json",
+  "title": "Autocomplete Configuration",
+  "description": "Application configuration values that affect autocomplete behavior and Django runtime settings.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "DJANGO_SECRET_KEY": {
+      "type": "string",
+      "description": "Django secret used for sessions and CSRF."
+    },
+    "DJANGO_DEBUG": {
+      "type": "string",
+      "enum": [
+        "0",
+        "1",
+        "true",
+        "false",
+        "True",
+        "False"
+      ],
+      "default": "1"
+    },
+    "DJANGO_ALLOWED_HOSTS": {
+      "type": "string",
+      "description": "Comma-separated host allow list."
+    },
+    "AUTOCOMPLETE_MIN_PREFIX": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 2,
+      "description": "Minimum normalized prefix length before suggestions are returned."
+    },
+    "AUTOCOMPLETE_LIMIT": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 10,
+      "description": "Default maximum number of suggestions returned."
+    }
+  },
+  "examples": [
+    {
+      "DJANGO_DEBUG": "1",
+      "DJANGO_ALLOWED_HOSTS": "127.0.0.1,localhost",
+      "AUTOCOMPLETE_MIN_PREFIX": 2,
+      "AUTOCOMPLETE_LIMIT": 10
+    }
+  ]
+}

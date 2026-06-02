@@ -1,0 +1,68 @@
+openapi: 3.1.0
+info:
+  title: Search Autocomplete Web Contract
+  version: 0.1.0
+  description: Simple route contract for the Django + HTMX autocomplete application.
+servers:
+  - url: http://127.0.0.1:8000
+paths:
+  /:
+    get:
+      summary: Redirect to the search page
+      responses:
+        "302":
+          description: Temporary redirect to /search/
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /search/
+  /search/:
+    get:
+      summary: Render the search page
+      responses:
+        "200":
+          description: Search page HTML
+          content:
+            text/html:
+              schema:
+                type: string
+  /suggest/:
+    get:
+      summary: Return autocomplete suggestions as an HTMX partial
+      parameters:
+        - name: q
+          in: query
+          required: false
+          description: Prefix query. The server bounds it to 255 characters before searching.
+          schema:
+            type: string
+            maxLength: 255
+      responses:
+        "200":
+          description: HTML suggestions partial. The response is not JSON.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              example: no-store
+          content:
+            text/html:
+              schema:
+                type: string
+  /admin/:
+    get:
+      summary: Django admin interface
+      responses:
+        "200":
+          description: Admin login or admin page HTML, depending on authentication state.
+          content:
+            text/html:
+              schema:
+                type: string
+components:
+  schemas:
+    Word:
+      $ref: ./word.schema.json
+    Suggestion:
+      $ref: ./suggestion.schema.json
