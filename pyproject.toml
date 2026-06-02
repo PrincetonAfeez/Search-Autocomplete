@@ -1,0 +1,109 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "search-autocomplete"
+version = "0.1.0"
+description = "Django + HTMX autocomplete app backed by a hand-built Python Trie."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "Search Autocomplete contributors" }]
+keywords = ["django", "trie", "autocomplete", "htmx", "portfolio"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Django :: 5.2",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing :: Indexing",
+]
+dependencies = [
+    "Django>=5.2,<6",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    "pytest-django",
+    "hypothesis",
+    "playwright",
+    "pytest-playwright",
+]
+dev = [
+    "search-autocomplete[test]",
+    "ruff",
+    "mypy",
+    "pip-audit",
+    "pip-tools",
+]
+
+[project.scripts]
+search-autocomplete = "cli:main"
+
+[project.urls]
+Homepage = "https://github.com/your-username/search-autocomplete"
+Repository = "https://github.com/your-username/search-autocomplete"
+Documentation = "https://github.com/your-username/search-autocomplete#readme"
+
+[tool.setuptools]
+packages = [
+    "autocomplete",
+    "config",
+    "corpus",
+    "corpus.migrations",
+    "corpus.management",
+    "corpus.management.commands",
+    "web",
+]
+
+[tool.setuptools.package-data]
+web = [
+    "templates/web/*.html",
+    "templates/web/partials/*.html",
+    "static/web/*.js",
+    "static/web/*.css",
+    "static/web/*.txt",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = [
+    "e2e: browser-level tests requiring Playwright",
+    "perf: performance regression tests",
+]
+
+[tool.coverage.run]
+source = ["autocomplete", "corpus", "web", "config", "cli"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/wsgi.py",
+    "*/asgi.py",
+]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+skip_empty = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.11"
+packages = ["autocomplete"]
+ignore_missing_imports = true
+warn_unused_ignores = true
+strict_optional = true
