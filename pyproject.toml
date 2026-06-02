@@ -35,7 +35,13 @@ test = [
     "pytest-playwright",
 ]
 dev = [
-    "search-autocomplete[test]",
+    # Mirror [project.optional-dependencies].test so pip-compile does not emit a local file:// pin.
+    "pytest",
+    "pytest-cov",
+    "pytest-django",
+    "hypothesis",
+    "playwright",
+    "pytest-playwright",
     "ruff",
     "mypy",
     "pip-audit",
@@ -46,9 +52,9 @@ dev = [
 search-autocomplete = "cli:main"
 
 [project.urls]
-Homepage = "https://github.com/your-username/search-autocomplete"
-Repository = "https://github.com/your-username/search-autocomplete"
-Documentation = "https://github.com/your-username/search-autocomplete#readme"
+Homepage = "https://github.com/PrincetonAfeez/Search-Autocomplete"
+Repository = "https://github.com/PrincetonAfeez/Search-Autocomplete"
+Documentation = "https://github.com/PrincetonAfeez/Search-Autocomplete#readme"
 
 [tool.setuptools]
 packages = [

@@ -10,7 +10,8 @@ switch ($Task) {
         pip install -e . --no-deps
     }
     "install-dev" {
-        pip install -e ".[dev]"
+        pip install -r requirements-dev.lock
+        pip install -e . --no-deps
         playwright install chromium
     }
     "test" { python -m pytest }
@@ -19,7 +20,7 @@ switch ($Task) {
         ruff format --check .
     }
     "typecheck" { mypy autocomplete }
-    "audit" { pip-audit -r requirements.lock }
+    "audit" { pip-audit -r requirements-dev.lock }
     "coverage" { python -m pytest --cov --cov-report=term-missing }
     "run" { python manage.py runserver }
     "seed" { python manage.py seed_corpus data/words.csv }

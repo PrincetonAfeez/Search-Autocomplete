@@ -5,7 +5,8 @@ install:
 	pip install -e . --no-deps
 
 install-dev:
-	pip install -e ".[dev]"
+	pip install -r requirements-dev.lock
+	pip install -e . --no-deps
 	playwright install chromium
 
 test:
@@ -19,7 +20,7 @@ typecheck:
 	mypy autocomplete
 
 audit:
-	pip-audit -r requirements.lock
+	pip-audit -r requirements-dev.lock
 
 coverage:
 	python -m pytest --cov --cov-report=term-missing

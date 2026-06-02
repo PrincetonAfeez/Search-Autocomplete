@@ -22,8 +22,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.lock
-          pip install -e ".[dev]"
+          pip install -r requirements-dev.lock
+          pip install -e . --no-deps
           playwright install chromium
 
       - name: Lint
@@ -35,7 +35,7 @@ jobs:
         run: mypy autocomplete
 
       - name: Security audit
-        run: pip-audit -r requirements.lock
+        run: pip-audit -r requirements-dev.lock
 
       - name: Tests with coverage
         run: python -m pytest --cov --cov-report=term-missing -m "not e2e"

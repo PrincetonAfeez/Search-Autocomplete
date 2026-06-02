@@ -1,26 +1,10 @@
 #
-# Pinned for Python 3.11+. Regenerate with:
-#   pip-compile --extra=test --output-file=requirements.lock --strip-extras pyproject.toml
+# Pinned runtime dependencies for Python 3.11+. Regenerate with:
+#   pip-compile --output-file=requirements.lock --strip-extras pyproject.toml
 #
 asgiref==3.11.1
     # via django
-colorama==0.4.6
-    # via pytest
 django==5.2.14
-    # via search-autocomplete (pyproject.toml)
-iniconfig==2.3.0
-    # via pytest
-packaging==26.2
-    # via pytest
-pluggy==1.6.0
-    # via pytest
-pygments==2.20.0
-    # via pytest
-pytest==9.0.3
-    # via
-    #   pytest-django
-    #   search-autocomplete (pyproject.toml)
-pytest-django==4.12.0
     # via search-autocomplete (pyproject.toml)
 sqlparse==0.5.5
     # via django

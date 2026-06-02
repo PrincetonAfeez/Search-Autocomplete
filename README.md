@@ -1,6 +1,6 @@
 # Search Autocomplete
 
-[![CI](https://github.com/your-username/search-autocomplete/actions/workflows/test.yml/badge.svg)](https://github.com/your-username/search-autocomplete/actions/workflows/test.yml)
+[![CI](https://github.com/PrincetonAfeez/Search-Autocomplete/actions/workflows/test.yml/badge.svg)](https://github.com/PrincetonAfeez/Search-Autocomplete/actions/workflows/test.yml)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
 ![Coverage ≥85%](https://img.shields.io/badge/coverage-%E2%89%A585%25-green)
 ![License MIT](https://img.shields.io/badge/license-MIT-blue)
@@ -31,9 +31,16 @@ Open http://127.0.0.1:8000/search/ and type `py`, `da`, or `tr`.
 Reproducible install (CI canonical):
 
 ```powershell
+pip install -r requirements-dev.lock
+pip install -e . --no-deps
+playwright install chromium
+```
+
+Runtime-only install:
+
+```powershell
 pip install -r requirements.lock
 pip install -e . --no-deps
-pip install -e ".[test]"
 ```
 
 Windows task runner: `.\tasks.ps1 install-dev` · Unix: `make install-dev`
@@ -76,6 +83,45 @@ python manage.py seed_corpus data/words.csv   # --clear --dry-run --delimiter ";
 python manage.py rebuild_trie
 python cli.py py                              # or: search-autocomplete py
 python scripts/benchmark_suggest.py           # latency benchmark
+```
+
+### CLI exit codes
+
+| Code | Meaning |
+| --- | --- |
+| 0 | Successful one-shot query, REPL session, `--help`, or `--version`. |
+| 2 | Usage/configuration error, such as an unknown flag or `--limit` below 1. |
+
+No-match and too-short-prefix outcomes (`No matches`, `Keep typing`) are successful results and also return 0.
+
+## Corpus seed format
+
+`seed_corpus` accepts UTF-8 CSV/text rows in one of two forms:
+
+```text
+word
+word,weight
+```
+
+Rules:
+
+- `word` is trimmed and must not be blank.
+- `word` must be ≤255 display characters.
+- `normalized_text` is derived with Unicode casefold normalization.
+- Normalized text must be ≤255 characters.
+- `weight` must be an integer from 0 through 2_147_483_647.
+- Missing weight uses `--default-weight`.
+- Duplicate normalized keys update the existing row.
+- `text` and `weight` are updated on duplicate keys.
+- `is_active` is preserved when an existing row is updated.
+- `--clear` deletes existing rows before importing.
+- `--dry-run` validates and reports create/update counts without writing.
+
+Output summary:
+
+```text
+seed complete: created=<n>, updated=<n>, invalid=<n>
+dry run complete: would_create=<n>, would_update=<n>, invalid=<n>
 ```
 
 ## Quality gates

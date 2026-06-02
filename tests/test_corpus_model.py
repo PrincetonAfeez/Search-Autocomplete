@@ -2,7 +2,10 @@
 
 import pytest
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 
+from autocomplete.constants import MAX_WEIGHT
+from corpus.loader import rebuild_engine
 from corpus.models import Word
 
 
@@ -46,6 +49,42 @@ def test_word_rejects_text_exceeding_max_length():
 def test_word_rejects_negative_weight():
     with pytest.raises(ValidationError):
         Word.objects.create(text="Bad", weight=-1)
+
+
+@pytest.mark.django_db
+def test_word_accepts_max_weight():
+    word = Word.objects.create(text="Heavy", weight=MAX_WEIGHT)
+
+    assert word.weight == MAX_WEIGHT
+
+
+@pytest.mark.django_db
+def test_word_rejects_weight_above_max():
+    with pytest.raises(ValidationError):
+        Word.objects.create(text="TooHeavy", weight=MAX_WEIGHT + 1)
+
+
+@pytest.mark.django_db
+def test_word_database_constraint_rejects_weight_above_max():
+    with pytest.raises(IntegrityError):
+        Word.objects.bulk_create(
+            [
+                Word(
+                    text="TooHeavy",
+                    normalized_text="tooheavy",
+                    weight=MAX_WEIGHT + 1,
+                )
+            ]
+        )
+
+
+@pytest.mark.django_db
+def test_rebuild_engine_accepts_max_weight_word():
+    Word.objects.create(text="Heavy", weight=MAX_WEIGHT)
+
+    engine = rebuild_engine()
+
+    assert [suggestion.word for suggestion in engine.suggest("he")] == ["Heavy"]
 
 
 @pytest.mark.django_db
@@ -102,6 +141,17 @@ def test_bulk_create_empty_list_does_not_clear_engine(monkeypatch):
     Word.objects.bulk_create([])
 
     assert calls == []
+
+
+@pytest.mark.django_db
+def test_bulk_update_returns_updated_count():
+    word = Word.objects.create(text="Python", weight=100)
+    word.weight = 200
+
+    updated = Word.objects.bulk_update([word], ["weight"])
+
+    assert updated == 1
+    assert Word.objects.get(normalized_text="python").weight == 200
 
 
 @pytest.mark.django_db

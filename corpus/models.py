@@ -1,10 +1,10 @@
 """ Corpus models. """
 
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from autocomplete.constants import MAX_TERM_LENGTH
+from autocomplete.constants import MAX_TERM_LENGTH, MAX_WEIGHT
 from autocomplete.normalizer import normalize
 
 
@@ -30,11 +30,12 @@ class WordQuerySet(models.QuerySet):
         return created
 
     def bulk_update(self, objs, fields, batch_size=None):
-        super().bulk_update(objs, fields, batch_size=batch_size)
+        updated = super().bulk_update(objs, fields, batch_size=batch_size)
         if objs:
             from .loader import clear_engine
 
             clear_engine()
+        return updated
 
 
 class Word(models.Model):
@@ -46,7 +47,10 @@ class Word(models.Model):
         editable=False,
         blank=True,
     )
-    weight = models.PositiveIntegerField(default=1, validators=[MinValueValidator(0)])
+    weight = models.PositiveIntegerField(
+        default=1,
+        validators=[MinValueValidator(0), MaxValueValidator(MAX_WEIGHT)],
+    )
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -59,6 +63,10 @@ class Word(models.Model):
             models.CheckConstraint(
                 condition=models.Q(weight__gte=0),
                 name="corpus_word_weight_nonnegative",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(weight__lte=MAX_WEIGHT),
+                name="corpus_word_weight_lte_max",
             ),
         ]
 
