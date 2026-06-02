@@ -1,0 +1,36 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+.venv/
+venv/
+env/
+.env
+
+*.sqlite3
+*.sqlite3-journal
+
+staticfiles/
+*.egg-info/
+build/
+dist/
+.tox/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+.claude/
+
+# Pre-portfolio scratch artefacts kept on disk for reference but never tracked.
+Search Autocomplete.txt
+search_autocomplete_improved_full_scope.txt
+search-autocomplete-browser-check.png
+
+# Local build artefacts
+search_autocomplete.egg-info/
