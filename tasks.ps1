@@ -1,0 +1,28 @@
+param(
+    [Parameter(Position = 0)]
+    [ValidateSet("install", "install-dev", "test", "lint", "typecheck", "audit", "coverage", "run", "seed", "migrate", "bench")]
+    [string]$Task = "test"
+)
+
+switch ($Task) {
+    "install" {
+        pip install -r requirements.lock
+        pip install -e . --no-deps
+    }
+    "install-dev" {
+        pip install -e ".[dev]"
+        playwright install chromium
+    }
+    "test" { python -m pytest }
+    "lint" {
+        ruff check .
+        ruff format --check .
+    }
+    "typecheck" { mypy autocomplete }
+    "audit" { pip-audit -r requirements.lock }
+    "coverage" { python -m pytest --cov --cov-report=term-missing }
+    "run" { python manage.py runserver }
+    "seed" { python manage.py seed_corpus data/words.csv }
+    "migrate" { python manage.py migrate }
+    "bench" { python scripts/benchmark_suggest.py }
+}
