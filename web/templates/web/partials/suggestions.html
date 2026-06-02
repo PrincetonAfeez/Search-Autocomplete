@@ -1,0 +1,21 @@
+{% if is_too_short %}
+  <div class="empty-state">Keep typing</div>
+{% elif suggestions %}
+  <ul id="suggestion-list" class="suggestion-list" role="listbox" aria-labelledby="search-title">
+    {% for suggestion in suggestions %}
+      <li
+        id="suggestion-{{ forloop.counter0 }}"
+        class="suggestion-option"
+        role="option"
+        aria-selected="false"
+        data-word="{{ suggestion.word }}"
+        tabindex="-1"
+      >
+        <span class="suggestion-word"><strong>{{ suggestion.prefix }}</strong>{{ suggestion.suffix }}</span>
+        <span class="suggestion-weight">{{ suggestion.weight }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% elif normalized_query %}
+  <div class="empty-state">No matches found</div>
+{% endif %}

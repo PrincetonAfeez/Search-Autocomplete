@@ -1,0 +1,52 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search Autocomplete</title>
+  <link rel="stylesheet" href="{% static 'web/autocomplete.css' %}">
+  <script src="{% static 'web/htmx.min.js' %}" defer></script>
+  <script src="{% static 'web/htmx-lite.js' %}" defer></script>
+  <script src="{% static 'web/autocomplete.js' %}" defer></script>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="search-surface" aria-labelledby="search-title">
+      <div class="heading-row">
+        <div>
+          <p class="eyebrow">Trie index</p>
+          <h1 id="search-title">Search Autocomplete</h1>
+        </div>
+        <span id="loading" class="loading-indicator htmx-indicator" aria-live="polite">Searching</span>
+      </div>
+
+      <div class="search-control">
+        <input
+          id="search-input"
+          class="search-input"
+          type="search"
+          name="q"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="255"
+          placeholder="Type a prefix"
+          aria-label="Search prefix"
+          aria-labelledby="search-title"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-busy="false"
+          hx-get="{% url 'suggest' %}"
+          hx-trigger="keyup changed delay:250ms, search"
+          hx-target="#suggestions"
+          hx-indicator="#loading"
+        >
+      </div>
+
+      <div id="suggestions" class="suggestions-shell" aria-live="polite"></div>
+    </section>
+  </main>
+</body>
+</html>
